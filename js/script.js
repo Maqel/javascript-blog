@@ -6,6 +6,7 @@
     optTitleListSelector = '.titles',
     optArticleTagsSelector = '.post-tags .list',
     optArticleAuthorSelector = '.post-author',
+    optAuthorsListSelector = '.authors.list',
     optTagsListSelector = '.tags.list',
     optCloudClassCount = 5,
     optCloudClassPrefix = 'tag-size-';
@@ -175,7 +176,7 @@
   /*GENERATE AUTHOR*/
   const generateAuthor = function (){
     /* [NEW] create a new variable allTags with an empty array */
-    
+    let allAuthors = [];
     /*[DONE]find all articles*/
     const articles = document.querySelectorAll(optArticleSelector);
     /*[DONE]START LOOP for every article*/
@@ -186,12 +187,23 @@
       const articleAuthor = article.getAttribute('data-author');
       /*[DONE]generate HTML of the link*/
       const authorHTML = '<a href="#author-' + articleAuthor + '">' + articleAuthor + ' ' + '</a>';
+      /*add link to list*/
+      const authorListHTML = '<li><a href="#author-' + articleAuthor + '">' + articleAuthor + ' ' + '</a></li>';
       /*[DONE]add generated code to html variable*/
       html = html + ' ' + authorHTML;
+      /*[NEW] check if this link is NOT already in all Aurhors*/
+      if(allAuthors.indexOf(authorListHTML) == -1){
+        /*[NEW] add generated code to all Authors array*/
+        allAuthors.push(authorListHTML);
+      }
       /*[DONE]insert HTML of all the links into the autor wrapper*/
       const authorName = article.querySelector(optArticleAuthorSelector);
       authorName.innerHTML = html;
-    }
+    } /*[DONE]END LOOP for every article*/
+    /*[NEW] find list of authors in right column*/
+    const authorsList = document.querySelector(optAuthorsListSelector);
+    /*[NEW] add html from allAuthors to authorsList*/
+    authorsList.innerHTML = allAuthors.join(' ');
   };
   generateAuthor();
 
@@ -226,19 +238,12 @@
   /*AUTHOR CLICK LISTENER*/
   const addClickListenersToAuthors = function(){
     /*[DONE] find all links to authors*/
-    const authorLinks = document.querySelectorAll('.post-author a');
+    const authorLinks = document.querySelectorAll('.post-author a, .authors.list a');
     /*[DONE] START LOOP: for each link*/
     for (let authorLink of authorLinks){
       /*[DONE] add authorClickHandler as event listener for that link*/
       authorLink.addEventListener('click', authorClickHandler);
     } /*[DONE] END LOOP: for each link */
-    /*[DONE] find all links to authors in sidebar list*/
-    const authorLinksList = document.querySelectorAll('.list.authors a');
-    /*[DONE] START LOOP: for each link*/
-    for (let authorLink of authorLinksList){
-      /*[DONE] add authorClickHandler as event listener for that link*/
-      authorLink.addEventListener('click', authorClickHandler);
-    } /*[DONE] END LOOP: for each link*/
   };
   addClickListenersToAuthors();
 }
